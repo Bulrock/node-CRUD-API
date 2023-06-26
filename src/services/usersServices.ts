@@ -84,3 +84,18 @@ export function updateUser(req: IncomingMessage, res: ServerResponse, userId: st
     prepareJSONResponse(res, 404, { error: 'User not found' });
   }
 }
+
+export function deleteUser(req: IncomingMessage, res: ServerResponse, userId: string) {
+  if (!validateUserId(userId)) {
+    prepareJSONResponse(res, 400, { error: 'Invalid userId' });
+    return;
+  }
+
+  const user = db[userId];
+  if (user) {
+    delete db[userId];
+    prepareJSONResponse(res, 204, null);
+  } else {
+    prepareJSONResponse(res, 404, { error: 'User not found' });
+  }
+}
