@@ -1,0 +1,5 @@
+{
+  "ignore": ["node-modules"],
+  "watch": ["./index.ts"],
+  "exec": "ts-node ./index.ts"
+}
