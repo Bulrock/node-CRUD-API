@@ -50,3 +50,37 @@ export function getUser(req: IncomingMessage, res: ServerResponse, userId: strin
     prepareJSONResponse(res, 404, { error: 'User not found' });
   }
 }
+
+export function updateUser(req: IncomingMessage, res: ServerResponse, userId: string) {
+  if (!validateUserId(userId)) {
+    prepareJSONResponse(res, 400, { error: 'Invalid userId' });
+    return;
+  }
+
+  const user = db[userId];
+  if (user) {
+    const chunks: Uint8Array[] = [];
+    req
+      .on('data', (chunk) => {
+        chunks.push(chunk);
+      })
+      .on('end', () => {
+        const data = Buffer.concat(chunks).toString();
+        const userData = JSON.parse(data);
+
+        const validationError = validateUserFields(userData);
+        if (validationError) {
+          prepareJSONResponse(res, 400, { error: validationError });
+          return;
+        }
+
+        user.username = userData.username;
+        user.age = userData.age;
+        user.hobbies = userData.hobbies || [];
+
+        prepareJSONResponse(res, 200, user);
+      });
+  } else {
+    prepareJSONResponse(res, 404, { error: 'User not found' });
+  }
+}
