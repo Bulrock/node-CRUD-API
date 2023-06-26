@@ -2,7 +2,7 @@ import { db } from '../database';
 import { v4 } from 'uuid';
 import { IncomingMessage, ServerResponse } from 'http';
 import prepareJSONResponse from './prepareResponse';
-import { validateUserFields } from './validators';
+import { validateUserFields, validateUserId } from './validators';
 
 export function createUser(req: IncomingMessage, res: ServerResponse) {
   const chunks: Uint8Array[] = [];
@@ -35,4 +35,18 @@ export function createUser(req: IncomingMessage, res: ServerResponse) {
 
 export function getUsers(req: IncomingMessage, res: ServerResponse) {
   prepareJSONResponse(res, 200, Object.values(db));
+}
+
+export function getUser(req: IncomingMessage, res: ServerResponse, userId: string) {
+  if (!validateUserId(userId)) {
+    prepareJSONResponse(res, 400, { error: 'Invalid userId' });
+    return;
+  }
+
+  const user = db[userId];
+  if (user) {
+    prepareJSONResponse(res, 200, user);
+  } else {
+    prepareJSONResponse(res, 404, { error: 'User not found' });
+  }
 }

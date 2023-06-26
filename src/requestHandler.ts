@@ -1,5 +1,5 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import { getUsers, createUser } from './services/usersServices';
+import { getUsers, getUser, createUser } from './services/usersServices';
 import prepareJSONResponse from './services/prepareResponse';
 
 export function handleRequest(req: IncomingMessage, res: ServerResponse) {
@@ -7,6 +7,9 @@ export function handleRequest(req: IncomingMessage, res: ServerResponse) {
 
   if (url === '/api/users' && method === 'GET') {
     getUsers(req, res);
+  } else if (url && url.startsWith('/api/users/') && method === 'GET') {
+    const userId = url.split('/')[3];
+    getUser(req, res, userId);
   } else if (url === '/api/users' && method === 'POST') {
     createUser(req, res);
   } else {
