@@ -22,7 +22,7 @@ The application has 18 test scenarios to verify all the described functionality.
 
 To run the unit tests, execute the following command in the console:
 
-`npm run test`
+`npm run tests`
 
 **Libraries used for testing:**
 
