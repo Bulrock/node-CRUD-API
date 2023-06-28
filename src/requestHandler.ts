@@ -18,6 +18,16 @@ export function handleRequest(req: IncomingMessage, res: ServerResponse) {
   } else if (url && url.startsWith('/api/users/') && method === 'DELETE') {
     const userId = url.split('/')[3];
     deleteUser(req, res, userId);
+  } else if (
+    url &&
+    method !== 'GET' &&
+    method !== 'POST' &&
+    method !== 'PUT' &&
+    method !== 'DELETE'
+  ) {
+    prepareJSONResponse(res, 501, {
+      error: 'Server supports only: GET, POST, PUT or DELETE methods',
+    });
   } else {
     prepareJSONResponse(res, 404, { error: 'Not found' });
   }
