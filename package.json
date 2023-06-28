@@ -6,9 +6,8 @@
   "scripts": {
     "start:prod": "tsc && node ./dist/index.js",
     "start:dev": "nodemon",
-    "start:multi": "ts-node cluster.ts",
+    "start:multi": "tsc && node ./dist/src/cluster.js",
     "tests": "npx jest",
-    "build": "tsc",
     "lint": "eslint src/**/*.ts",
     "lint-fix": "eslint src/**/*.ts --fix"
   },
